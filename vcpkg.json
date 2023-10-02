@@ -1,0 +1,8 @@
+{
+    "dependencies": [
+      "nlohmann-json",
+      "protobuf",
+      "qt5",
+      "boost"
+    ]
+  }
