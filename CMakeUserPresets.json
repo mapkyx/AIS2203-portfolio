@@ -3,7 +3,7 @@
     "configurePresets": [
         {
             "name": "debug",
-            "toolchainFile": "C:/src/vcpkg/scripts/buildsystems/vcpkg.cmake"
+            "toolchainFile": "C:/Users/Admin/vcpkg/scripts/buildsystems/vcpkg.cmake"
         }
     ]
 }

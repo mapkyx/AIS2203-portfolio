@@ -4,7 +4,7 @@ project(PortfolioRobot)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_TOOLCHAIN_FILE "C:/src/vcpkg/scripts/buildsystems/vcpkg.cmake")
+set(CMAKE_TOOLCHAIN_FILE "C:/Users/Admin/vcpkg/scripts/buildsystems/vcpkg.cmake")
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -19,7 +19,13 @@ find_package(Qt5Widgets REQUIRED)
 
 add_subdirectory(protobuf)
 
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} main.cpp
+        src/Camera/camera_control.cpp
+        src/Camera/camera_control.h
+        src/GUI/gui.cpp
+        src/GUI/gui.h
+        src/RVR-Control/rvr_controller.cpp
+        src/RVR-Control/rvr_controller.h)
 
 target_include_directories(main PRIVATE "${CMAKE_SOURCE_DIR}/include")
 

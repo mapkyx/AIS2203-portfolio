@@ -3,6 +3,7 @@
       "nlohmann-json",
       "protobuf",
       "qt5",
-      "boost"
+      "boost",
+      "opencv"
     ]
   }
