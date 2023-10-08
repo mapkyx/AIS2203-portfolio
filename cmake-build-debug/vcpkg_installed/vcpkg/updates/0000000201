@@ -1,0 +1,7 @@
+Package: vcpkg-msbuild
+Version: 2023-08-08
+Depends: vcpkg-cmake-get-vars, vcpkg-pkgconfig-get-modules
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 1247b236d4ab63967f217e20949b8f76377704fdc9402a8dcc86780b22a08243
+Status: install ok installed
