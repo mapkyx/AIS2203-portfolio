@@ -7,6 +7,7 @@
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
+
     // Initialize RVR Controller
     RVRController rvrController;
     rvrController.initialize();
