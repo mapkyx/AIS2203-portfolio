@@ -1,0 +1,11 @@
+{
+  "dependencies": [
+    "realsense2",
+    "opencv",
+    "boost-asio",
+    "boost-bind",
+    "boost-thread",
+    "nlohmann-json",
+    "catch2"
+  ]
+}
