@@ -1,4 +1,3 @@
-
 #ifndef UDP_SERVER_HPP
 #define UDP_SERVER_HPP
 
@@ -9,7 +8,7 @@
 #include <thread>
 
 #include "network_helper.hpp"
-#include "Server/socket_handler.hpp"
+#include "socket_handler.hpp"
 
 #include <boost/asio.hpp>
 
