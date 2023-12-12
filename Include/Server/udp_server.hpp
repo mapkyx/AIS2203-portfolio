@@ -1,6 +1,6 @@
 
-#ifndef TESTABLE_NETWORKING_UDP_SERVER_HPP
-#define TESTABLE_NETWORKING_UDP_SERVER_HPP
+#ifndef UDP_SERVER_HPP
+#define UDP_SERVER_HPP
 
 #include <atomic>
 #include <iostream>
@@ -9,7 +9,7 @@
 #include <thread>
 
 #include "network_helper.hpp"
-#include "server/socket_handler.hpp"
+#include "Server/socket_handler.hpp"
 
 #include <boost/asio.hpp>
 
@@ -74,4 +74,4 @@ private:
     std::atomic<bool> stop_{false};
 };
 
-#endif//TESTABLE_NETWORKING_UDP_SERVER_HPP
+#endif//UDP_SERVER_HPP

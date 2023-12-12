@@ -1,6 +1,5 @@
-
-#ifndef TESTABLE_NETWORKING_SOCKET_HANDLER_HPP
-#define TESTABLE_NETWORKING_SOCKET_HANDLER_HPP
+#ifndef SOCKET_HANDLER_HPP
+#define SOCKET_HANDLER_HPP
 
 #include <atomic>
 #include <iostream>
@@ -87,4 +86,4 @@ private:
     friend class udp_server;
 };
 
-#endif//TESTABLE_NETWORKING_SOCKET_HANDLER_HPP
+#endif//SOCKET_HANDLER_HPP

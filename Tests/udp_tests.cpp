@@ -1,5 +1,5 @@
 #include <catch2/catch_test_macros.hpp>
-#include <Src/UDPReceiver.cpp>
+#include <Include/Server/udp_server.h>
 
 namespace {
 

@@ -1,4 +1,5 @@
 #include <catch2/catch_test_macros.hpp>
+#include <Src/Functions.cpp>
 #include <iostream>
 
 TEST_CASE("Test Sphero RVR Controller forward") {
