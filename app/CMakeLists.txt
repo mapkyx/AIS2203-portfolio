@@ -6,4 +6,7 @@ target_link_libraries(PortfolioRobot PRIVATE
         ${OpenCV_LIBRARIES}
         ${realsense2_LIBRARY}
         Boost::thread
+        SDL2::SDL2
+        SDL2::SDL2main
+        ws2_32
 )

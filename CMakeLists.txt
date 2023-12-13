@@ -4,6 +4,7 @@ project(PortfolioRobot)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(Boost_NO_WARN_NEW_VERSIONS ON)
+set(CMAKE_DISABLE_FIND_PACKAGE_ALSA ON) # disable alsa libraries (asound) search
 
 enable_testing()
 
@@ -12,6 +13,7 @@ find_package(OpenCV CONFIG REQUIRED)
 find_package(realsense2 CONFIG REQUIRED)
 find_package(Boost REQUIRED COMPONENTS thread)
 find_package(Catch2 3 REQUIRED)
+find_package(SDL2 REQUIRED)
 
 if(MSVC)
     add_compile_definitions("_WIN32_WINNT=0x0601")
@@ -45,6 +47,12 @@ if(Boost_FOUND)
     message("Boost found")
 else()
     message(FATAL_ERROR "Boost not found")
+endif()
+
+if(SDL2_FOUND)
+    message("SDL2 found")
+else()
+    message(FATAL_ERROR "SDL2 not found")
 endif()
 
 include_directories(include)

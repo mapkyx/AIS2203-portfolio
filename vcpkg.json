@@ -7,6 +7,7 @@
     "boost-bind",
     "boost-thread",
     "nlohmann-json",
-    "catch2"
+    "catch2",
+    "sdl2"
   ]
 }
