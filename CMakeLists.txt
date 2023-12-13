@@ -47,6 +47,8 @@ else()
     message(FATAL_ERROR "Boost not found")
 endif()
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(include)
+
+add_subdirectory(app)
 add_subdirectory(source)
 add_subdirectory(tests)

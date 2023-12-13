@@ -1,13 +1,14 @@
-add_executable(tests tests.cpp)
+add_executable(controller_tests controller_tests.cpp)
+target_link_libraries(controller_tests PRIVATE Catch2::Catch2WithMain)
 
-# Link libraries to your tests executable
-target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
-target_link_libraries(tests PRIVATE nlohmann_json nlohmann_json::nlohmann_json)
-target_link_libraries(tests PRIVATE ${realsense2_LIBRARY})
-target_link_libraries(tests PRIVATE ${OpenCV_LIBRARIES})
-target_link_libraries(tests PRIVATE Boost::thread)
+add_executable(helper_tests helper_tests.cpp)
+target_link_libraries(helper_tests PRIVATE Catch2::Catch2WithMain)
 
-# Register the tests
+add_executable(udp_tests udp_tests.cpp)
+target_link_libraries(udp_tests PRIVATE Catch2::Catch2WithMain)
+
 include(CTest)
 include(Catch)
-catch_discover_tests(tests)
+catch_discover_tests(controller_tests)
+catch_discover_tests(helper_tests)
+catch_discover_tests(udp_tests)
