@@ -12,4 +12,5 @@ target_link_libraries(sourceLibrary PRIVATE
         nlohmann_json::nlohmann_json
         ${OpenCV_LIBRARIES}
         Boost::boost
+        ws2_32
 )
