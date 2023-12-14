@@ -2,7 +2,7 @@
 #include <iostream>
 
 UDPClient::UDPClient(boost::asio::io_service& io_service, const std::string& host, short port)
-        : io_service_(io_service), socket_(io_service_), endpoint_(boost::asio::ip::address::from_string(host), port) {
+        : io_service_(io_service), socket_(io_service_), endpoint_(boost::asio::ip::address::from_string(host), 1234) {
     socket_.open(boost::asio::ip::udp::v4());
 }
 
