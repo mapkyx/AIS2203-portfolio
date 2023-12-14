@@ -2,8 +2,7 @@
 #include <boost/asio.hpp>
 #include <string>
 
-namespace UDP_Client {
-    class UDPClient {
+class UDPClient {
     public:
         UDPClient(boost::asio::io_service &io_service, const std::string &host, short port);
 
@@ -14,4 +13,3 @@ namespace UDP_Client {
         boost::asio::ip::udp::socket socket_;
         boost::asio::ip::udp::endpoint endpoint_;
     };
-}
