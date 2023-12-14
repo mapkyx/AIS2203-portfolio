@@ -1,5 +1,10 @@
+<<<<<<< Updated upstream:Include/Server/network_helper.hpp
 #ifndef NETWORK_HELPER_HPP
 #define NETWORK_HELPER_HPP
+=======
+#ifndef NETWORKING_DEMO_NETWORK_HELPER_HPP
+#define NETWORKING_DEMO_NETWORK_HELPER_HPP
+>>>>>>> Stashed changes:include/server/network_helper.hpp
 
 #include <array>
 
@@ -25,18 +30,22 @@ std::array<unsigned char, 4> int_to_bytes(int n, byte_order order = byte_order::
     return bytes;
 }
 
-int bytes_to_int(std::array<unsigned char, 4> buffer, byte_order order = byte_order::LITTLE) {
+int bytes_to_int(const std::array<unsigned char, 4>& buffer, byte_order order = byte_order::LITTLE) {
     if (order == byte_order::LITTLE) {
-        return int(buffer[0] |
-                   buffer[1] << 8 |
-                   buffer[2] << 16 |
-                   buffer[3] << 24);
+        return int(buffer[0]) |
+               int(buffer[1]) << 8 |
+               int(buffer[2]) << 16 |
+               int(buffer[3]) << 24;
     } else {
-        return int(buffer[0] << 24 |
-                   buffer[1] << 16 |
-                   buffer[2] << 8 |
-                   buffer[3]);
+        return int(buffer[0]) << 24 |
+               int(buffer[1]) << 16 |
+               int(buffer[2]) << 8 |
+               int(buffer[3]);
     }
 }
 
+<<<<<<< Updated upstream:Include/Server/network_helper.hpp
 #endif//NETWORK_HELPER_HPP
+=======
+#endif//NETWORKING_DEMO_NETWORK_HELPER_HPP
+>>>>>>> Stashed changes:include/server/network_helper.hpp
