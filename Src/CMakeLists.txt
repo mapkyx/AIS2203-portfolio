@@ -1,7 +1,21 @@
-add_library(mylib myHeader.cpp)
+add_library(sourceLibrary
+        message_handler.cpp
+        KeyboardListener.cpp
+        SpheroRVRController.cpp
+        SpheroRVRMessageHandler.cpp
+        udp_client.cpp
+        )
 
-target_link_libraries(mylib PUBLIC ${OpenCV_LIBARIES})
-target_link_libraries(mylib PUBLIC ${Boost_LIBARIES})
+add_subdirectory(udp)
 
-target_include_directories(mylib PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(sourceLibrary PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/../include
+        )
 
+target_link_libraries(sourceLibrary PRIVATE
+        nlohmann_json::nlohmann_json
+        ${OpenCV_LIBRARIES}
+        Boost::boost
+        ws2_32
+        udpLibrary
+        )
