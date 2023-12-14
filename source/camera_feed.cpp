@@ -7,7 +7,7 @@
 using namespace cv;
 
 void camera_feed_receiver(boost::asio::io_service& io_service, const std::string& host, short port) {
-    boost::asio::ip::udp::socket socket(io_service, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 1236));
+    boost::asio::ip::udp::socket socket(io_service, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 1235));
     boost::asio::ip::udp::endpoint sender_endpoint;
 
     while (true) {
