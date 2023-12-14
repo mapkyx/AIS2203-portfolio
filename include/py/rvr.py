@@ -1,10 +1,14 @@
 import time
 import socket
 import logging
-from sphero_sdk import SpheroRvrObserver, Colors
+from sphero_sdk import SpheroRvrObserver, Colors, RvrStreamingServices, RawMotorModesEnum
 from threading import Thread, Event
 import random
 import threading
+import io
+import picamera
+from PIL import Image
+import struct
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
@@ -12,8 +16,12 @@ logging.basicConfig(level=logging.INFO)
 # Initialize the Sphero Rvr Observer
 rvr = SpheroRvrObserver()
 
-UDP_PORT = 1234
-speed = 50
+UDP_PORT1 = 1234 #Keyboard listener
+UDP_PORT2 = 1235 #Camera capture client
+UDP_PORT3 = 1236 #Send RVR state client
+
+#Adjust speed between 0 and 255
+speed = 100
 
 shutdown_event = Event()
 
@@ -30,7 +38,6 @@ battery_percentage = 0
 imu_pitch = 0.0
 imu_roll = 0.0
 imu_yaw = 0.0
-
 
 class Colours:
     red = (255, 0, 0)
@@ -55,12 +62,62 @@ def setup_rvr():
         logging.error(f"Error setting up RVR: {e}")
 
 
+def capture_and_send_images():
+    global client_socket
+
+    # UDP setup
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    client_socket.settimeout(2)
+    host = '192.168.129.66'  # Replace with the IP of the receiver
+    port = UDP_PORT2 # Replace with desired port number, make sure to adjust in c++ program too
+
+    # Camera setup
+    camera = picamera.PiCamera()
+    camera.resolution = (720, 560)
+    camera.framerate = 4
+    time.sleep(1)  # Camera warm-up time
+
+    stream = io.BytesIO()
+    MAX_UDP_PACKET_SIZE = 65000  # Packet size
+
+    try:
+        for _ in camera.capture_continuous(stream, 'jpeg', use_video_port=True, quality=30):
+            size = stream.tell()
+
+            # Send frame size
+            client_socket.sendto(struct.pack('<L', size), (host, port))
+
+            # Split frame into larger chunks and send each chunk
+            stream.seek(0)
+            while size > 0:
+                chunk = stream.read(min(size, MAX_UDP_PACKET_SIZE))
+                client_socket.sendto(chunk, (host, port))
+                size -= len(chunk)
+                time.sleep(0.01)  # Delay between chunks
+
+            # Reset stream for the next frame
+            stream.seek(0)
+            stream.truncate()
+
+            time.sleep(0.05)  # Delay after sending each frame
+
+    except KeyboardInterrupt:
+        print("Camera capture stopped by user.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        camera.close()
+        client_socket.close()
+        print("Camera and socket resources released.")
+
+
 # IMU data handler
 def imu_data_handler(response):
     global imu_pitch, imu_roll, imu_yaw
     imu_pitch = response['IMU']['pitch']
     imu_roll = response['IMU']['roll']
     imu_yaw = response['IMU']['yaw']
+    print(f"IMU Data Updated - Pitch: {imu_pitch}, Roll: {imu_roll}, Yaw: {imu_yaw}")
 
 
 # Enable IMU streaming
@@ -69,95 +126,92 @@ def enable_imu_streaming():
         service=RvrStreamingServices.imu,
         handler=imu_data_handler
     )
-    rvr.sensor_control.start(interval=250)  # Adjust the interval as needed
+    rvr.sensor_control.start(interval=250)
 
 
-def drive_with_heading(speed, heading):
-    try:
-        rvr.drive_with_heading(speed, heading, 0)
-    except Exception as e:
-        logging.error(f"Error driving RVR: {e}")
+def control_raw_motors(left_speed, right_speed):
+    left_mode = RawMotorModesEnum.forward.value if left_speed >= 0 else RawMotorModesEnum.reverse.value
+    right_mode = RawMotorModesEnum.forward.value if right_speed >= 0 else RawMotorModesEnum.reverse.value
+
+    rvr.raw_motors(
+        left_mode=left_mode,
+        left_speed=abs(left_speed),
+        right_mode=right_mode,
+        right_speed=abs(right_speed)
+    )
 
 
 def drive_forward():
+    control_raw_motors(speed, speed)
     global current_mode
-    drive_with_heading(speed, 0)
     rvr.led_control.set_all_leds_rgb(*Colours.blue)
     if current_mode == "manual control":
         current_mode = "manual"
 
 
 def drive_backward():
+    control_raw_motors(-speed, -speed)
     global current_mode
-    drive_with_heading(speed, 180)
     rvr.led_control.set_all_leds_rgb(*Colours.yellow)
     if current_mode == "manual control":
         current_mode = "manual"
 
 
 def turn_left():
+    control_raw_motors(-speed, speed)
     global current_mode
-    drive_with_heading(speed, 270)
     rvr.led_control.set_all_leds_rgb(*Colours.white)
     if current_mode == "manual control":
         current_mode = "manual"
 
 
 def turn_right():
+    control_raw_motors(speed, -speed)
     global current_mode
-    drive_with_heading(speed, 90)
     rvr.led_control.set_all_leds_rgb(*Colours.white)
     if current_mode == "manual control":
         current_mode = "manual"
 
 
 def stop():
-    drive_with_heading(0, 0)
+    control_raw_motors(0, 0)
     rvr.led_control.set_all_leds_rgb(*Colours.red)
 
 
 def manual_control():
     global current_mode
     current_mode = "manual"
-    # Additional logic to switch to manual control, if necessary
-
-
-def color_detected_handler(response):
-    global current_mode
-    detected_color = response.get('color', None)
-
-    if detected_color == 'red':  # Assuming 'red' is a predefined color
-        print("Red color detected. Stopping RVR.")
-        stop()
-        current_mode = "manual"  # Switch to manual mode or handle as needed
 
 
 def autonomous_drive():
-    global current_mode, imu_pitch, imu_roll
+    global current_mode, imu_pitch, imu_roll, imu_yaw
 
     current_mode = "autonomous"
     print("Starting autonomous drive")
 
-    # Obstacle detection thresholds
-    pitch_threshold = -1  # Adjust as needed
-    roll_threshold = -1  # Adjust as needed
+    # Obstacle detection and navigation thresholds
+    pitch_threshold = 10  
+    roll_threshold = 10   
+    yaw_change_threshold = 5 
+
+    last_yaw = imu_yaw  # Store the last yaw value for comparison
 
     try:
-
-        buffer_time = 0.5  # Time in seconds to wait before rechecking IMU data
-        last_check_time = time.time()
-
         while not shutdown_event.is_set() and current_mode == "autonomous":
-            current_time = time.time()
-            if current_time - last_check_time > buffer_time:
-                last_check_time = current_time
+            print(f"Current IMU - Pitch: {imu_pitch}, Roll: {imu_roll}, Yaw: {imu_yaw}")
             # Perform random movement
             random_movement()
 
             # Check IMU data for potential collisions
             if abs(imu_pitch) > pitch_threshold or abs(imu_roll) > roll_threshold:
-                print("Potential obstacle detected! Changing direction.")
+                print("Potential obstacle detected based on pitch/roll! Changing direction.")
                 change_direction()
+
+            # Check for significant changes in yaw
+            elif abs(imu_yaw - last_yaw) > yaw_change_threshold:
+                print("Significant change in yaw detected! Adjusting course.")
+                adjust_course_based_on_yaw(imu_yaw)
+                last_yaw = imu_yaw  # Update the last yaw value
 
             time.sleep(0.1)  # Short delay for loop
 
@@ -165,32 +219,33 @@ def autonomous_drive():
         logging.error(f"Error in autonomous driving: {e}")
 
 
+def adjust_course_based_on_yaw(current_yaw):
+    """ Adjusts the RVR's course based on changes in the yaw. """
+    rotate(random.choice([-15, 15]))  # Rotate by a small angle
+
+
 def random_movement():
-    """ Randomly choose to drive forward, backward, left, or right. """
+    """ Randomly choose to drive forward, backward, left, or right with random speed and duration. """
     choice = random.choice(['forward', 'backward', 'left', 'right'])
+    random_speed = random.randint(20, 100)  # Random speed
+    random_duration = random.uniform(1, 3)  # Random duration
+
     if choice == 'forward':
-        drive_forward()
+        control_raw_motors(speed, speed)
     elif choice == 'backward':
-        drive_backward()
+        control_raw_motors(-speed, -speed)
     elif choice == 'left':
-        turn_left()
+        control_raw_motors(-speed, speed)
     elif choice == 'right':
-        turn_right()
-    time.sleep(3)  # Drive for a random duration
+        control_raw_motors(speed, -speed)
+
+    time.sleep(random_duration)
+    stop()
 
 
 def change_direction():
     """ Rotate the RVR or reverse its direction when an obstacle is detected. """
-    choice = random.choice(['turn', 'reverse'])
-    if choice == 'turn':
-        # Rotate by a random angle
-        rotate(random.randint(0, 360))
-    elif choice == 'reverse':
-        # Reverse the direction
-        if last_command_received == 'forward':
-            drive_backward()
-        else:
-            drive_forward()
+    rotate(random.randint(90, 270))  # Rotate by a random angle between 90 and 270 degrees
     time.sleep(1)
     stop()
 
@@ -231,7 +286,7 @@ def send_rvr_state():
     global last_command_received
 
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
-        server_address = ('192.168.63.66', 1235)  # Replace with your computer's IP address
+        server_address = ('192.168.129.66', UDP_PORT3)  # Replace with your computer's IP address
         while not shutdown_event.is_set():
             get_battery_percentage()  # Update battery percentage
             state_message = f"{battery_percentage}%,{last_command_received},{current_mode}"
@@ -244,7 +299,7 @@ def udp_server():
     global shutdown_event, last_command_received
 
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
-        server_address = ('', UDP_PORT)  # Listen on all available interfaces
+        server_address = ('', UDP_PORT1)  # Listen on all available interfaces, with the defined port number
         sock.bind(server_address)
 
         logging.info("UDP Server listening on port 1234 for WASD commands.")
@@ -266,7 +321,7 @@ def udp_server():
 
         while not shutdown_event.is_set():
             try:
-                data, address = sock.recvfrom(65536)
+                data, address = sock.recvfrom(65000)
                 command = data.decode().lower()
 
                 # Update the last command received
@@ -295,8 +350,14 @@ def main():
     send_rvr_state_thread = Thread(target=send_rvr_state)
     send_rvr_state_thread.start()
 
+    enable_imu_streaming()
+
+    capture_thread = Thread(target=capture_and_send_images)
+    capture_thread.start()
+
     udp_server_thread.join()
     send_rvr_state_thread.join()
+    capture_thread.join()
 
 
 if __name__ == '__main__':
