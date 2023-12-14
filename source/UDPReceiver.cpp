@@ -1,5 +1,4 @@
 #include <iostream>
-#include <thread>
 #include <boost/asio.hpp>
 #include <array>
 
@@ -31,25 +30,3 @@ private:
     boost::asio::ip::udp::endpoint remote_endpoint_;
     std::array<char, 1024> recv_buffer_;
 };
-
-int main() {
-    try {
-        boost::asio::io_service io_service;
-        UDPServer server(io_service, 22);
-
-        std::cout << "Succeeded with connecting through UDP." << std::endl;
-
-        // Create a separate thread to run the io_service
-        std::thread io_thread([&io_service]() {
-            io_service.run();
-        });
-
-        // Here you can add more threads for other tasks if needed
-
-        io_thread.join();
-    } catch (std::exception& e) {
-        std::cerr << "Exception: " << e.what() << std::endl;
-    }
-
-    return 0;
-}
