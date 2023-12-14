@@ -28,14 +28,14 @@ void keyboard_listener(UDPClient& client) {
                     case SDLK_a: client.send_command("start_left"); break;
                     case SDLK_s: client.send_command("start_backward"); break;
                     case SDLK_d: client.send_command("start_right"); break;
+                    case SDLK_q: client.send_command("stop-right"); break;
                     case SDLK_1: client.send_command("autonomously-control"); break;
                     case SDLK_0: client.send_command("manual-control"); break;
                     case SDLK_c:
                         isRunning.store(false);
                         break;
                 }
-            } else if (e.type == SDL_KEYUP) {
-                client.send_command("stop-right");
+            }
             }
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
