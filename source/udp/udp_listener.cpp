@@ -9,9 +9,9 @@ extern std::atomic<bool> isRunning;
 
 void udp_listener() {
     boost::asio::io_service io_service;
-    boost::asio::ip::udp::socket socket(io_service, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 1235));
+    boost::asio::ip::udp::socket socket(io_service, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 1236));
     std::array<char, 1024> recv_buf{};
-    std::cout << "Listening for data on port 1235..." << std::endl;
+    std::cout << "Listening for data on port 1236..." << std::endl;
 
     while (isRunning.load()) {
         boost::asio::ip::udp::endpoint remote_endpoint;
