@@ -1,4 +1,9 @@
-
+#include "sphero/shared_data.hpp"
+#include "server/udp_client.hpp"
+#include "camera_feed.hpp"
+#include "sphero/display_rvr_state.hpp"
+#include "server/udp_listener.hpp"
+#include "keyboard_listener.hpp"
 #include <thread>
 #include <iostream>
 #include <atomic>
