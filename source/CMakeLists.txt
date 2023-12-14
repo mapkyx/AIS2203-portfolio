@@ -1,7 +1,13 @@
 add_library(sourceLibrary
         functions.cpp
+<<<<<<< Updated upstream
         GUI.cpp
         UDPReceiver.cpp
+=======
+        camera_feed.cpp
+        display_rvr_state.cpp
+        keyboard_listener.cpp
+>>>>>>> Stashed changes
 )
 
 target_include_directories(sourceLibrary PUBLIC
