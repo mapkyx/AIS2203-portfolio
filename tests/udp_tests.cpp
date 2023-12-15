@@ -4,7 +4,7 @@
 #include <boost/asio.hpp>
 #include <boost/asio/ip/udp.hpp>
 #include <boost/asio/buffer.hpp>
-#include "/Users/johanneslervag/CLionProjects/Sphero_rvr_v2/Include/udp_client.h"
+#include "server/udp_client.hpp"
 
 // Path to the Python script
 const std::string pythonScriptPath = "include/Py/rvr.py";

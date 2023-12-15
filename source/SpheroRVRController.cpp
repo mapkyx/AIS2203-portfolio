@@ -1,5 +1,5 @@
 // SpheroRVRController.cpp
-#include "SpheroRVRController.hpp"
+#include "sphero/SpheroRVRController.hpp"
 
 // Implement the constructor
 SpheroRVRController::SpheroRVRController() {

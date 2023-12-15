@@ -1,5 +1,5 @@
-#include "SpheroRVRMessageHandler.hpp"
-#include "SpheroRVRController.hpp"
+#include "sphero/SpheroRVRMessageHandler.hpp"
+#include "sphero/SpheroRVRController.hpp"
 #include "message_handler.hpp"
 
 // Implement the constructor
