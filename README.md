@@ -53,6 +53,8 @@ After launching the application, use the following keyboard keys to control the 
 
 -W, A, S, D for movement.
 
+-Q to stop the RVR
+
 -1 for autonomous control.
 
 -0 for manual control.
