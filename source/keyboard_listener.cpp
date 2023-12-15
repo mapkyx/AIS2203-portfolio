@@ -36,11 +36,10 @@ void keyboard_listener(UDPClient& client) {
                         break;
                 }
             }
-            }
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
-
     SDL_DestroyWindow(window);
     SDL_Quit();
 }
+
