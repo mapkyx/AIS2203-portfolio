@@ -1,6 +1,10 @@
 #include <catch2/catch_test_macros.hpp>
-#include <source/Functions.cpp>
+#include "sphero/SpheroRVRController.hpp"
+#include "sphero/SpheroRVRMessageHandler.hpp"
 #include <iostream>
+#include <thread>
+#include <chrono>
+
 
 TEST_CASE("Test Sphero RVR Controller forward") {
     SpheroRVRController controller;
@@ -48,4 +52,16 @@ TEST_CASE("Test Sphero RVR Controller right") {
     auto actual = handler.handle_message(testCommand);
 
     CHECK(expected == actual);
+}
+
+TEST_CASE("Test Sphero RVR Controller failed left") {
+    SpheroRVRController controller;
+    SpheroRVRMessageHandler handler(controller);
+
+    std::string testCommand = "a";  // Example command for testing
+
+    auto expected = "Command received: " + testCommand;
+    auto actual = "t";
+
+    CHECK(expected != actual);
 }

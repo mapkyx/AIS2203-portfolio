@@ -190,9 +190,9 @@ def autonomous_drive():
     print("Starting autonomous drive")
 
     # Obstacle detection and navigation thresholds
-    pitch_threshold = 10  
-    roll_threshold = 10   
-    yaw_change_threshold = 5 
+    pitch_threshold = 10
+    roll_threshold = 10
+    yaw_change_threshold = 5
 
     last_yaw = imu_yaw  # Store the last yaw value for comparison
 

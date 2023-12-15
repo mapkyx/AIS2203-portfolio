@@ -4,6 +4,7 @@
 #include "sphero/display_rvr_state.hpp"
 #include "server/udp_listener.hpp"
 #include "keyboard_listener.hpp"
+#include <opencv2/opencv.hpp>
 #include <thread>
 #include <iostream>
 #include <atomic>
