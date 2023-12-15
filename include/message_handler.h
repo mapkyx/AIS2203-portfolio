@@ -1,5 +1,5 @@
-#ifndef AIS2203_PORTFOLIO_MESSAGE_HANDLER_H
-#define AIS2203_PORTFOLIO_MESSAGE_HANDLER_H
+#ifndef MESSAGE_HANDLER_MESSAGE_HANDLER_HPP
+#define MESSAGE_HANDLER_MESSAGE_HANDLER_HPP
 
 #pragma once
 
@@ -11,5 +11,4 @@ public:
     virtual std::string handle_message(const std::string& message) = 0;
 };
 
-
-#endif //AIS2203_PORTFOLIO_MESSAGE_HANDLER_H
+#endif//MESSAGE_HANDLER_MESSAGE_HANDLER_HPP

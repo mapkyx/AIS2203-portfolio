@@ -13,22 +13,12 @@ void UDPClient::send_command(const std::string& command) {
         std::cerr << "Failed to send command: " << ec.message() << std::endl;
     }
     else {
-<<<<<<< Updated upstream:source/udp_client.cpp
             lastSentCommand_ = command;  // Update the last sent command
         }
-=======
-                lastSentCommand_ = command;  // Update the last sent command
-            }
-    }
 
     std::string UDPClient::getLastSentCommand() const {
         return lastSentCommand_;
     }
->>>>>>> Stashed changes:source/udp/udp_client.cpp
-}
 
-std::string UDPClient::getLastSentCommand() const {
-    return lastSentCommand_;
-}
 
 

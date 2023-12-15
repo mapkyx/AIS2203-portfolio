@@ -1,27 +1,16 @@
 #include <catch2/catch_test_macros.hpp>
-<<<<<<< Updated upstream:Tests/controller_tests.cpp
-<<<<<<< Updated upstream:Tests/controller_tests.cpp
-#include <Src/Functions.cpp>
-=======
-#include "SpheroRVRController.hpp"
-#include "SpheroRVRMessageHandler.hpp"
->>>>>>> Stashed changes:tests/controller_tests.cpp
-#include <iostream>
-#include <random>
-=======
-#include "include/sphero/SpheroRVRController.hpp"
-#include "include/sphero/SpheroRVRMessageHandler.hpp"
+#include "/Users/johanneslervag/CLionProjects/Sphero_rvr_v2/Include/SpheroRVRController.hpp"
+#include "/Users/johanneslervag/CLionProjects/Sphero_rvr_v2/Include/SpheroRVRMessageHandler.hpp"
 #include <iostream>
 #include <thread>
 #include <chrono>
 
->>>>>>> Stashed changes:tests/controller_tests.cpp
 
 TEST_CASE("Test Sphero RVR Controller forward") {
     SpheroRVRController controller;
     SpheroRVRMessageHandler handler(controller);
 
-    std::string testCommand = "w";
+    std::string testCommand = "w";  // Example command for testing
 
     auto expected = "Command received: " + testCommand;
     auto actual = handler.handle_message(testCommand);
@@ -33,7 +22,7 @@ TEST_CASE("Test Sphero RVR Controller backwards") {
     SpheroRVRController controller;
     SpheroRVRMessageHandler handler(controller);
 
-    std::string testCommand = "s";
+    std::string testCommand = "s";  // Example command for testing
 
     auto expected = "Command received: " + testCommand;
     auto actual = handler.handle_message(testCommand);
@@ -45,7 +34,7 @@ TEST_CASE("Test Sphero RVR Controller left") {
     SpheroRVRController controller;
     SpheroRVRMessageHandler handler(controller);
 
-    std::string testCommand = "a";
+    std::string testCommand = "a";  // Example command for testing
 
     auto expected = "Command received: " + testCommand;
     auto actual = handler.handle_message(testCommand);
@@ -57,7 +46,7 @@ TEST_CASE("Test Sphero RVR Controller right") {
     SpheroRVRController controller;
     SpheroRVRMessageHandler handler(controller);
 
-    std::string testCommand = "d";
+    std::string testCommand = "d";  // Example command for testing
 
     auto expected = "Command received: " + testCommand;
     auto actual = handler.handle_message(testCommand);
@@ -65,23 +54,6 @@ TEST_CASE("Test Sphero RVR Controller right") {
     CHECK(expected == actual);
 }
 
-<<<<<<< Updated upstream:Tests/controller_tests.cpp
-<<<<<<< Updated upstream:Tests/controller_tests.cpp
-
-=======
-TEST_CASE("Test Sphero RVR Controller fail") {
-    SpheroRVRController controller;
-    SpheroRVRMessageHandler handler(controller);
-
-    std::string testCommand = "t";
-
-    auto expected = "Command received: " + testCommand;
-    auto actual = handler.handle_message(testCommand);
-
-    CHECK(expected == actual);
-}
->>>>>>> Stashed changes:tests/controller_tests.cpp
-=======
 TEST_CASE("Test Sphero RVR Controller failed left") {
     SpheroRVRController controller;
     SpheroRVRMessageHandler handler(controller);
@@ -93,4 +65,3 @@ TEST_CASE("Test Sphero RVR Controller failed left") {
 
     CHECK(expected != actual);
 }
->>>>>>> Stashed changes:tests/controller_tests.cpp
