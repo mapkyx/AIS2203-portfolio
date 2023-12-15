@@ -1,6 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include <catch2/catch_test_macros.hpp>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 #include <Include/Server/udp_server.h>
 =======
 >>>>>>> Stashed changes
@@ -17,11 +18,33 @@ const int port = 22;
 struct my_message_handler : message_handler {
 
   my_message_handler(const std::function<std::string(const std::string &)> &f) : f_(f) {}
+=======
+#include <thread>
+#include <boost/asio.hpp>
+#include <boost/asio/ip/udp.hpp>
+#include <boost/asio/buffer.hpp>
+#include "include/server/udp_client.hpp"
 
-        std::string handle_message(const std::string &message) override {
-            return f_(message);
-        }
+// Path to the Python script
+const std::string pythonScriptPath = "include/py/rvr.py";
 
+
+TEST_CASE("Test UDP server communication") {
+      std::thread pythonServerThread([]() {
+            std::string command = "python " + pythonScriptPath;
+            system(command.c_str());
+        });
+
+   // Wait for the server to start
+       std::this_thread::sleep_for(std::chrono::milliseconds(500));
+>>>>>>> Stashed changes
+
+    SECTION("Test sending a message to the server") {
+        // Create UDP client and send a message
+                boost::asio::io_service io_service;
+                UDPClient client(io_service, "127.0.0.1", 1234);
+
+<<<<<<< Updated upstream
     private:
             std::function<std::string(const std::string&)> f_;
     };
@@ -117,5 +140,18 @@ TEST_CASE("Test UDP server communication") {
     // Stop the server and join the thread
     io_service.stop();
     io_thread.join();
+}
+>>>>>>> Stashed changes
+=======
+                // Modify this command based on the expected behavior in your server
+                std::string testCommand = "start_forward";
+                client.send_command(testCommand);
+
+                // Add appropriate checks for the received message in the Python UDP server
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    }
+
+     // Stop the Python server thread
+        pythonServerThread.detach();
 }
 >>>>>>> Stashed changes

@@ -1,5 +1,6 @@
 #include <catch2/catch_test_macros.hpp>
 <<<<<<< Updated upstream:Tests/controller_tests.cpp
+<<<<<<< Updated upstream:Tests/controller_tests.cpp
 #include <Src/Functions.cpp>
 =======
 #include "SpheroRVRController.hpp"
@@ -7,6 +8,14 @@
 >>>>>>> Stashed changes:tests/controller_tests.cpp
 #include <iostream>
 #include <random>
+=======
+#include "include/sphero/SpheroRVRController.hpp"
+#include "include/sphero/SpheroRVRMessageHandler.hpp"
+#include <iostream>
+#include <thread>
+#include <chrono>
+
+>>>>>>> Stashed changes:tests/controller_tests.cpp
 
 TEST_CASE("Test Sphero RVR Controller forward") {
     SpheroRVRController controller;
@@ -57,6 +66,7 @@ TEST_CASE("Test Sphero RVR Controller right") {
 }
 
 <<<<<<< Updated upstream:Tests/controller_tests.cpp
+<<<<<<< Updated upstream:Tests/controller_tests.cpp
 
 =======
 TEST_CASE("Test Sphero RVR Controller fail") {
@@ -69,5 +79,18 @@ TEST_CASE("Test Sphero RVR Controller fail") {
     auto actual = handler.handle_message(testCommand);
 
     CHECK(expected == actual);
+}
+>>>>>>> Stashed changes:tests/controller_tests.cpp
+=======
+TEST_CASE("Test Sphero RVR Controller failed left") {
+    SpheroRVRController controller;
+    SpheroRVRMessageHandler handler(controller);
+
+    std::string testCommand = "a";  // Example command for testing
+
+    auto expected = "Command received: " + testCommand;
+    auto actual = "t";
+
+    CHECK(expected != actual);
 }
 >>>>>>> Stashed changes:tests/controller_tests.cpp

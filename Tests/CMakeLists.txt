@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 include_directories("${CMAKE_SOURCE_DIR}/include")
 link_libraries(Catch2::Catch2)
@@ -19,6 +20,12 @@ add_test(NAME test_udp COMMAND test_udp)
 add_executable(controller_tests controller_tests.cpp
         /Users/johanneslervag/Documents/3.Året automasjon/Sanntids datateknikk/AIS2203-portfolio/Src/SpheroRVRController.cpp
         /Users/johanneslervag/Documents/3.Året automasjon/Sanntids datateknikk/AIS2203-portfolio/Src/SpheroRVRMessageHandler.cpp)
+=======
+add_executable(controller_tests controller_tests.cpp
+        source/SpheroRVRController.cpp
+        source/SpheroRVRMessageHandler.cpp
+        )
+>>>>>>> Stashed changes
 add_test(NAME controller_tests COMMAND controller_tests)
 target_link_libraries(controller_tests PRIVATE Catch2::Catch2WithMain)
 
@@ -26,7 +33,12 @@ add_executable(helper_tests helper_tests.cpp)
 add_test(NAME helper_tests COMMAND helper_tests)
 target_link_libraries(helper_tests PRIVATE Catch2::Catch2WithMain)
 
+<<<<<<< Updated upstream
 add_executable(udp_tests udp_tests.cpp)
+=======
+add_executable(udp_tests udp_tests.cpp
+        include/server/udp_client.hpp)
+>>>>>>> Stashed changes
 add_test(NAME udp_tests COMMAND udp_tests)
 target_link_libraries(udp_tests PRIVATE Catch2::Catch2WithMain)
 
