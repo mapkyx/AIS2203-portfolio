@@ -19,13 +19,11 @@ This project consists of a C++ application designed to remotely control a Sphero
 
 Prerequisites
 
--Boost: Used for UDP networking.
 
--OpenCV: For video processing and displaying.
+-CMake: For building the project.
 
--SDL2: For handling keyboard inputs.
+-Vcpkg: To manage packages for C++ libraries
 
--CMake (Optional): For building the project.
 
 ## Installing and Running
 
