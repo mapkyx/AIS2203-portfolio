@@ -1,37 +1,62 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.17)
+project(Sphero_rvr_v2)
 
-project(Sphero_rvr)
-
-set(CMAKE_CXX_STANDARD 17)
-
-option(NETWORKING_BUILD_TESTS "Enable tests" ON)
-set(Boost_NO_WARN_NEW_VERSIONS 1)
-
-find_package(OpenCV CONFIG REQUIRED)
-find_package(Boost COMPONENTS system REQUIRED)
-find_package(nlohmann_json CONFIG REQUIRED)
-find_package(realsense2 CONFIG REQUIRED)
-
-
-include_directories(${OpenCV_INCLUDE_DIRS})
-include_directories(${boost_INCLUDE_DIRS})
-include_directories(${nlohmann_json_INCLUDE_DIRS})
-include_directories(${realsense2_INCLUDE_DIRS})
-
-add_subdirectory(Src)
-add_subdirectory(Tests)
-add_subdirectory(App)
-add_subdirectory(Include)
-
-
-
-include(FetchContent)
-
-FetchContent_Declare(
-        Catch2
-        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-        GIT_TAG v3.4.0
-)
-FetchContent_MakeAvailable(Catch2)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(Boost_NO_WARN_NEW_VERSIONS ON)
+set(CMAKE_DISABLE_FIND_PACKAGE_ALSA ON) # disable alsa libraries (asound) search
 
 enable_testing()
+
+find_package(nlohmann_json CONFIG REQUIRED)
+find_package(OpenCV CONFIG REQUIRED)
+find_package(realsense2 CONFIG REQUIRED)
+find_package(Boost COMPONENTS system REQUIRED)
+find_package(Catch2 3 REQUIRED)
+find_package(SDL2 REQUIRED)
+
+if(MSVC)
+    add_compile_definitions("_WIN32_WINNT=0x0601")
+endif()
+
+if (Catch2_FOUND)
+    message("Catch2 found")
+else()
+    message(FATAL_ERROR "Catch2 not found")
+endif()
+
+if(nlohmann_json_FOUND)
+    message("nlohmann_json found")
+else()
+    message(FATAL_ERROR "nlohmann_json not found")
+endif()
+
+if(realsense2_FOUND)
+    message("Realsense2 found")
+else()
+    message(FATAL_ERROR "Realsense2 not found")
+endif()
+
+if(OpenCV_FOUND)
+    message("OpenCV found")
+else()
+    message(FATAL_ERROR "OpenCV not found")
+endif()
+
+if(Boost_FOUND)
+    message("Boost found")
+else()
+    message(FATAL_ERROR "Boost not found")
+endif()
+
+if(SDL2_FOUND)
+    message("SDL2 found")
+else()
+    message(FATAL_ERROR "SDL2 not found")
+endif()
+
+include_directories(include)
+
+add_subdirectory(app)
+add_subdirectory(Src)
+add_subdirectory(tests)
