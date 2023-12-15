@@ -7,9 +7,12 @@ class UDPClient {
         UDPClient(boost::asio::io_service &io_service, const std::string &host, short port);
 
         void send_command(const std::string &command);
+        
+        std::string getLastSentCommand() const;
 
     private:
         boost::asio::io_service &io_service_;
         boost::asio::ip::udp::socket socket_;
         boost::asio::ip::udp::endpoint endpoint_;
+        std::string lastSentCommand_;
     };

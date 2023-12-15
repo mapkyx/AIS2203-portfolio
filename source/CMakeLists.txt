@@ -1,12 +1,10 @@
 add_library(sourceLibrary
-        functions.cpp
-        UDPReceiver.cpp
-        camera_feed.cpp
-        display_rvr_state.cpp
-        keyboard_listener.cpp
-)
-
-add_subdirectory(udp)
+        message_handler.cpp
+        KeyboardListener.cpp
+        SpheroRVRController.cpp
+        SpheroRVRMessageHandler.cpp
+        udp_client.cpp
+        )
 
 target_include_directories(sourceLibrary PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/../include
